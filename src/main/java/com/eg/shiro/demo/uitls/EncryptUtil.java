@@ -4,7 +4,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 
 /*加密算法*/
-public final class HashUtil {
+public final class EncryptUtil {
 
     private static final String SALT = "DEFAULT_SALT";
 

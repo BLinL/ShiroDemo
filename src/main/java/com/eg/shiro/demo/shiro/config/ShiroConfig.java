@@ -43,7 +43,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean sffb = new ShiroFilterFactoryBean();
         sffb.setSecurityManager(securityManager);
         sffb.setLoginUrl("/api/user/login");
-        sffb.setSuccessUrl("/index");
+//        sffb.setSuccessUrl("/index");
 //        sffb.setUnauthorizedUrl("/error");
 
         Map<String, String> filterMap = new LinkedHashMap<>();

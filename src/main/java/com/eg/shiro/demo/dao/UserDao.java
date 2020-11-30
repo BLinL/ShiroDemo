@@ -18,10 +18,10 @@ public class UserDao {
         UserDo userDo = userVoBuilder.accountName("admin")
                 .password("64ea22d8255ff30ae673597551f7ee124d675fe0c892921da9004d15c4595e1b")
 //                .status(-1)
-                .salt("admin.salt")
+                .salt("admin.salt")//盐
                 .build();
-        userDo.setRoles(new HashSet<>(Collections.singletonList("admin")));
-        userDo.setPermissions(new HashSet<>(Arrays.asList("user:add","user:view")));
+        userDo.setRoles(new HashSet<>(Collections.singletonList("admin")));//角色
+        userDo.setPermissions(new HashSet<>(Arrays.asList("user:add","user:view")));//权限
 
         //user2
         UserDo userDo1 = userVoBuilder.accountName("test")

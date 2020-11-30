@@ -9,16 +9,17 @@ public class SimpleResponse<T> {
     private T data;
     private String message;
 
-    private static final String SUCCESS = "请求成功";
-    private static final String BAD_REQUEST = "请求失败";
-    private static final String NOT_FOUND = "请求找不到";
-
     public SimpleResponse() {
     }
 
     public SimpleResponse(String message) {
         this.code = ResultCode.SUCCESS.getCode();
         this.message = message;
+    }
+
+    public SimpleResponse(ResultCode code) {
+        this.code = code.getCode();
+        this.message = code.getMsg();
     }
 
     public SimpleResponse(ResultCode code, String message) {
@@ -35,14 +36,14 @@ public class SimpleResponse<T> {
     public static <T> SimpleResponse<T> ok() {
         SimpleResponse<T> response = new SimpleResponse<>();
         response.setCode(ResultCode.SUCCESS.getCode());
-        response.setMessage(SUCCESS);
+        response.setMessage(ResultCode.SUCCESS.getMsg());
         return response;
     }
 
     public static <T> SimpleResponse<T> ok(T data) {
         SimpleResponse<T> response = new SimpleResponse<>();
         response.setCode(ResultCode.SUCCESS.getCode());
-        response.setMessage(SUCCESS);
+        response.setMessage(ResultCode.SUCCESS.getMsg());
         response.setData(data);
         return response;
     }
@@ -50,7 +51,7 @@ public class SimpleResponse<T> {
     public static <T> SimpleResponse<T> ok(T data, String message) {
         SimpleResponse<T> response = new SimpleResponse<>();
         response.setCode(ResultCode.SUCCESS.getCode());
-        response.setMessage(message);
+        response.setMessage(ResultCode.SUCCESS.getMsg());
         response.setData(data);
         return response;
     }
@@ -58,7 +59,7 @@ public class SimpleResponse<T> {
     public static <T> SimpleResponse<T> fail(T data) {
         SimpleResponse<T> response = new SimpleResponse<>();
         response.setCode(ResultCode.FAIL.getCode());
-        response.setMessage(BAD_REQUEST);
+        response.setMessage(ResultCode.FAIL.getMsg());
         response.setData(data);
         return response;
     }
@@ -66,7 +67,7 @@ public class SimpleResponse<T> {
     public static <T> SimpleResponse<T> fail(T data, String message) {
         SimpleResponse<T> response = new SimpleResponse<>();
         response.setCode(ResultCode.FAIL.getCode());
-        response.setMessage(message);
+        response.setMessage(ResultCode.FAIL.getMsg());
         response.setData(data);
         return response;
     }

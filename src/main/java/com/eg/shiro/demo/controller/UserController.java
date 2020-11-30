@@ -8,6 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -36,7 +37,7 @@ public class UserController {
     /**
      * 需要 admin 或 test角色
      */
-    @RequiresRoles(value = "{admin, test}" ,logical = Logical.OR)
+    @RequiresRoles(value = {"admin", "test"} ,logical = Logical.OR)
     @RequestMapping(value = "/{username}", produces = "application/json", method = RequestMethod.GET)
     public SimpleResponse<?> getUserByName(@PathVariable("username") String userName) {
         log.info("user {}", userName);
@@ -52,7 +53,7 @@ public class UserController {
      */
     @RequiresPermissions("user:add")
     @RequestMapping(produces = "application/json", method = RequestMethod.POST)
-    public SimpleResponse<?> addUser(@RequestBody UserDo userDo) {
+    public SimpleResponse<?> addUser(@RequestBody @Validated UserDo userDo) {
         log.info("user {}", userDo);
         return SimpleResponse.ok();
     }

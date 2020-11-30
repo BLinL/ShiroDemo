@@ -9,6 +9,7 @@ public enum ResultCode {
     UNKNOWN_ACCOUNT(2,"账户不存在"),
     PASSWORD_ERR(3,"密码错误"),
     UNAUTHENTIC(401,"无权限"),
+    LOCKED_USER(4,"用户被锁定"),
     REGUMENT_ILLEGAL_ERR(5,"非法参数");
 
     private int code;
