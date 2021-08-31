@@ -1,7 +1,10 @@
 package com.eg.shiro.demo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.beans.Transient;
 import java.util.Set;
 
 public class UserDo {
@@ -9,6 +12,8 @@ public class UserDo {
     @NotNull(message = "accountName can't be null")
     private String accountName;
     private String username;
+
+    @JsonIgnore
     @NotNull(message = "password can't be null")
     private String password;
 
@@ -190,8 +195,8 @@ public class UserDo {
                 ", email='" + email + '\'' +
                 ", salt='" + salt + '\'' +
                 ", status='" + status + '\'' +
-                ", roles=" + roles +
-                ", permissions=" + permissions +
+                ", roles=" + roles+ '\'' +
+                ", permissions=" + permissions + '\'' +
                 '}';
     }
 }

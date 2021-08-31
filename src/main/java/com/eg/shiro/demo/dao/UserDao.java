@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class UserDao {
@@ -17,7 +18,7 @@ public class UserDao {
         //user1
         UserDo userDo = userVoBuilder.accountName("admin")
                 .password("64ea22d8255ff30ae673597551f7ee124d675fe0c892921da9004d15c4595e1b")
-//                .status(-1)
+//                .status(-1)admin
                 .salt("admin.salt")//盐
                 .build();
         userDo.setRoles(new HashSet<>(Collections.singletonList("admin")));//角色
@@ -40,4 +41,12 @@ public class UserDao {
         return userCollection.get(userName);
     }
 
+    public List<UserDo> getAllUser() {
+        return userCollection.values().stream().collect(Collectors.toList());
+    }
+
+
+    public void addUser(UserDo userDo){
+        this.userCollection.put(userDo.getAccountName(), userDo);
+    }
 }

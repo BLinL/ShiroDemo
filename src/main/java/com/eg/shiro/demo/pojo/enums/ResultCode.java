@@ -8,7 +8,7 @@ public enum ResultCode {
     LOGIN_OK(1,"登录成功"),
     UNKNOWN_ACCOUNT(2,"账户不存在"),
     PASSWORD_ERR(3,"密码错误"),
-    UNAUTHENTIC(401,"无权限"),
+    UNAUTHENTIC(401,"认证失败"),
     LOCKED_USER(4,"用户被锁定"),
     REGUMENT_ILLEGAL_ERR(5,"非法参数");
 

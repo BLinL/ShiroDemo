@@ -1,59 +1,48 @@
 package com.eg.shiro.demo.controller;
 
+import com.eg.shiro.demo.dao.UserDao;
 import com.eg.shiro.demo.pojo.UserDo;
 import com.eg.shiro.demo.pojo.dto.SimpleResponse;
 import com.eg.shiro.demo.pojo.enums.ResultCode;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
-import org.apache.shiro.subject.Subject;
+import com.eg.shiro.demo.uitls.EncryptUtil;
+import com.eg.shiro.demo.uitls.JWTUtil;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/user")
 public class LoginController {
 
+    @Autowired
+    private UserDao userDao;
+
     Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @ResponseBody
     @PostMapping(value = "login")
-    public SimpleResponse<?> login(@RequestBody @Validated UserDo userDo) {
+    public SimpleResponse<?> login(UserDo userDo) {
         String accountName = userDo.getAccountName();
         String password = userDo.getPassword();
-
-        log.info("user login request {}" , userDo);
-        Subject subject = SecurityUtils.getSubject();
-        SimpleResponse<?> response = null;
-        if (!subject.isAuthenticated()) {
-            UsernamePasswordToken token = new UsernamePasswordToken(accountName, password);
-            try {
-                subject.login(token);
-                log.info("isAuthenticated? {} {} ", subject.isAuthenticated(),"登录成功！");
-                response = new SimpleResponse<>(ResultCode.LOGIN_OK);
-            } catch (UnknownAccountException uae) {
-                response = new SimpleResponse<>(ResultCode.UNKNOWN_ACCOUNT);
-                log.info("认证失败 {}",uae.getMessage());
-            } catch (IncorrectCredentialsException ice) {
-                response = new SimpleResponse<>(ResultCode.PASSWORD_ERR);
-                log.info("认证失败 {}",ice.getMessage());
-            } catch (LockedAccountException lae) {
-                response = new SimpleResponse<>(ResultCode.LOCKED_USER);
-                log.info("认证失败 {}",lae.getMessage());
-            } catch (AuthenticationException ae) {
-                response = new SimpleResponse<>(ResultCode.FAIL, ae.getMessage());
-                log.info("认证失败 {}",ae.getMessage());
+        UserDo dbUser = userDao.getUserByName(accountName);
+        SimpleResponse<?> response;
+        log.info("user login request {}", userDo);
+        if (dbUser == null) {
+            throw new UnknownAccountException("用户不存在");
+        } else {
+            String encryptPass = EncryptUtil.encrypt(password, dbUser.getSalt());
+            if(!encryptPass.equals(dbUser.getPassword())){
+                System.out.println("input pass:" + encryptPass);
+                System.out.println("db    pass:" + dbUser.getPassword());
+                throw new UnauthenticatedException("密码错误");
             }
-        }else{
-            log.info("已登录！");
-            response = SimpleResponse.ok();
         }
 
-        return response;
+        response = new SimpleResponse<>(ResultCode.SUCCESS);
+        return response.ok(JWTUtil.createToken(accountName));
     }
 }
