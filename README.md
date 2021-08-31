@@ -1,4 +1,4 @@
-# springboot 集成shiro 快速上手项目
+# springboot 集成shiro  jwt登录 快速上手项目
 一个简单的shiro demo 用于快速上手shiro
 
 为了最简明教程 没有使用数据库
